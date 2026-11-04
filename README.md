@@ -1,10 +1,12 @@
 # trailmark
 
+[![crates.io](https://img.shields.io/crates/v/trailmark.svg?color=blue)](https://crates.io/crates/trailmark) [![docs.rs](https://img.shields.io/docsrs/trailmark?color=blue)](https://docs.rs/trailmark) ![ci](https://github.com/zametka/trailmark/actions/workflows/ci.yml/badge.svg)
+
 `trailmark` keeps a project's rules, decisions, loop reports, reviews, deploys and facts as small records with ids. It builds a task-shaped bundle of the records a task needs, checks the store (`trailmark check`), and can install a read guard so an agent asks `trailmark` instead of opening the store as one file.
 
 It is a record book, a bundle, a checker and a guard. It is not a search engine. Finding one rule from a vaguely worded task does not beat a random draw on specific hits. The numbers are under [What it does not do](#what-it-does-not-do).
 
-Version 0.1.0. License: MIT OR Apache-2.0 (see `LICENSE-MIT` and `LICENSE-APACHE`). Copyright 2026 Konstantin Gorodinskii. Source: https://github.com/zametka/trailmark.
+Version 0.1.1. License: MIT OR Apache-2.0 (see `LICENSE-MIT` and `LICENSE-APACHE`). Copyright 2026 Konstantin Gorodinskii. Source: https://github.com/zametka/trailmark.
 
 ## Install
 
