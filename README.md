@@ -157,3 +157,5 @@ python3 -I eval/trail_eval.py synthetic target/release/trailmark --random 40
 ```
 
 The release flags keep a home directory out of the binary. The eval is the synthetic example only. It needs `python3` and the standard library. It checks that the harness runs. It does not measure recall.
+
+A new version is published by publishing a GitHub release of the version tag (`0.1.1`). That runs fmt, clippy, and the tests, then `cargo publish --locked`. The steps are in `CONTRIBUTING.md`.
