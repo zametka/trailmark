@@ -1,0 +1,26 @@
+[workspace]
+
+[package]
+name = "trailmark"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Konstantin Gorodinskii <mail@konstantin.io>"]
+description = "Record book and checker for a project's rules, decisions, and the ids code cites"
+readme = "README.md"
+repository = "https://github.com/zametka/trailmark"
+keywords = ["cli", "documentation", "agents"]
+categories = ["command-line-utilities"]
+rust-version = "1.87"
+
+[[bin]]
+name = "trailmark"
+path = "src/main.rs"
+
+[lib]
+name = "trailmark"
+path = "src/lib.rs"
+
+[dependencies]
+regex = "1"
+toml = "0.8"

@@ -1,0 +1,7 @@
+## Decision
+
+{{decision}}
+
+## Why
+
+{{why}}

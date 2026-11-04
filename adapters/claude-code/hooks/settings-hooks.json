@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/trail-session-start.sh" }] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Read|Grep|Glob|Bash|Edit|Write|MultiEdit", "hooks": [{ "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/trail-guard-read.sh" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Read|Grep|Glob|Bash|Edit|Write|MultiEdit", "hooks": [{ "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/trail-guard-read.sh post" }] }
+    ]
+  }
+}

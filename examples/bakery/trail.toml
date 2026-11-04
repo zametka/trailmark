@@ -1,0 +1,21 @@
+name = "Oven"
+requires = ">=0.1.0"
+store = "docs/records"
+cutover = false
+frozen = false
+never_whole = ["docs/records/"]
+
+[areas]
+kitchen = { keywords = ["oven", "dough", "bake", "prover", "loaf", "flour", "starter"], paths = ["kitchen/**"] }
+counter = { keywords = ["till", "order", "label", "price", "board"], paths = ["counter/**"] }
+delivery = { keywords = ["van", "window", "route", "box", "cake"], paths = ["delivery/**"] }
+billing = { keywords = ["refund", "receipt", "deposit", "drawer", "tip"], paths = ["billing/**"] }
+process = { keywords = ["review", "shift", "close", "complaint"], paths = [] }
+
+[code]
+include = ["kitchen/**", "counter/**", "delivery/**", "billing/**"]
+exclude = ["**/target/**"]
+
+[reserve]
+rule = 40
+open = 20

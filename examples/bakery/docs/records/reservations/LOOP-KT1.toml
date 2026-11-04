@@ -1,0 +1,13 @@
+[[reservation]]
+type = "rule"
+from = 31
+to = 40
+for = "LOOP-KT1"
+date = "2026-03-02"
+
+[[reservation]]
+type = "open"
+from = 19
+to = 24
+for = "LOOP-KT1"
+date = "2026-03-02"

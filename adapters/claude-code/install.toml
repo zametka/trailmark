@@ -1,0 +1,27 @@
+# What `trailmark adapter install claude-code` writes. Paths are relative to the repository root.
+# The trailmark core reads this file; it knows no harness folder by itself.
+message = "Hook scripts run through sh, so they need no exec bit. --force replaces the copied files (the skill, both hook scripts, and never-whole.txt) and, when the adapter's memory_md is set, the memory index (the old file is kept once as <name>.pre-trailmark.md). A missing settings file is created. An existing one is never replaced: the block to merge is printed and the command exits 0. Without --force, a copied file that differs is left alone and the command exits 7, having written nothing."
+
+[[copy]]
+from = "SKILL.md"
+to = ".claude/skills/trailmark/SKILL.md"
+
+[[copy]]
+from = "hooks/session-start.sh"
+to = ".claude/hooks/trail-session-start.sh"
+
+[[copy]]
+from = "hooks/guard-read.sh"
+to = ".claude/hooks/trail-guard-read.sh"
+
+[never_whole]
+to = ".claude/hooks/never-whole.txt"
+
+[settings]
+from = "hooks/settings-hooks.json"
+to = ".claude/settings.json"
+
+# With --force, index/start.md replaces the file named by [adapters.claude_code] memory_md
+# in trail.toml (or .trail/local.toml); the old file is kept as <name>.pre-trailmark.md.
+[memory]
+config_table = "claude_code"

@@ -1,0 +1,10 @@
+# What `trailmark adapter install generic` writes. Paths are relative to the repository root.
+message = "Paste the block at the top of AGENTS.md. Nothing in that file was edited."
+
+[[copy]]
+from = "agents-block.md"
+to = ".trail/agents-block.md"
+
+[[copy]]
+from = "trail-start.sh"
+to = ".trail/trail-start.sh"

@@ -1,0 +1,244 @@
+{
+ "tasks": [
+  {
+   "key": "T01",
+   "text": "The morning loaf went out light. Where do we weigh it?",
+   "need": [
+    "RULE-1"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T02",
+   "text": "A rye loaf was labelled as wheat. What has to be on the allergen label?",
+   "need": [
+    "RULE-2"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T03",
+   "text": "Someone filled the oven log after the bake. When is the log written?",
+   "need": [
+    "RULE-3"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T04",
+   "text": "A clerk changed a standing order because the bin was full.",
+   "need": [
+    "RULE-4"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T05",
+   "text": "The van promised a wide arrival. How long is a delivery window?",
+   "need": [
+    "RULE-5"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T06",
+   "text": "A cream cake went out in a paper bag.",
+   "need": [
+    "RULE-6"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T07",
+   "text": "The close used the screen total and the drawer was short.",
+   "need": [
+    "RULE-7"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T08",
+   "text": "A wedding cake was iced from a verbal note, with no sketch.",
+   "need": [
+    "RULE-8"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T09",
+   "text": "The night baker left before the morning baker saw the prover.",
+   "need": [
+    "RULE-9"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T10",
+   "text": "The waste sheet said about a tray. How is waste recorded?",
+   "need": [
+    "RULE-10"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T11",
+   "text": "A 16:00 order was pushed into dough that was already shaped.",
+   "need": [
+    "RULE-11"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T12",
+   "text": "A gluten-free tin sat on a rack under wheat flour.",
+   "need": [
+    "RULE-12"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T13",
+   "text": "The starter was fed whenever someone remembered.",
+   "need": [
+    "RULE-13"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T14",
+   "text": "A refund line said misc and did not name the loaf.",
+   "need": [
+    "RULE-14"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T15",
+   "text": "The board still shows last week's rye price.",
+   "need": [
+    "RULE-15"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T16",
+   "text": "One person boxed a three-tier wedding cake.",
+   "need": [
+    "RULE-16"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T17",
+   "text": "The driver reordered the van route after leaving.",
+   "need": [
+    "RULE-17"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T18",
+   "text": "A card slip ended up in a coat pocket.",
+   "need": [
+    "RULE-18"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T19",
+   "text": "A new loaf went on the board after a single good bake.",
+   "need": [
+    "RULE-19"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T20",
+   "text": "The door sign said sold out while loaves sat in the back.",
+   "need": [
+    "RULE-20"
+   ],
+   "split": "held"
+  },
+  {
+   "key": "T21",
+   "text": "An online order never left the slip and the pass saw nothing.",
+   "need": [
+    "RULE-21"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T22",
+   "text": "Spelt replaced wheat and the printed label did not change.",
+   "need": [
+    "RULE-22"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T23",
+   "text": "The prover had drifted and the dough overproofed.",
+   "need": [
+    "RULE-23"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T24",
+   "text": "A burnt-crust complaint sat until Monday.",
+   "need": [
+    "RULE-24"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T25",
+   "text": "The closer kept the morning's tips.",
+   "need": [
+    "RULE-25"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T26",
+   "text": "The fire blanket hook was empty at open.",
+   "need": [
+    "RULE-26"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T27",
+   "text": "A cake was baked although the deposit never arrived.",
+   "need": [
+    "RULE-27"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T28",
+   "text": "The driver opened three boxes to find the right cake.",
+   "need": [
+    "RULE-28"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T29",
+   "text": "Orders for the next morning close at four, and the dough is mixed at five.",
+   "need": [
+    "DEC-0001"
+   ],
+   "split": "tune"
+  },
+  {
+   "key": "T30",
+   "text": "Is rye still on the standing menu, and who decided?",
+   "need": [
+    "DEC-0002"
+   ],
+   "split": "tune"
+  }
+ ]
+}
