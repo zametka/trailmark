@@ -464,9 +464,9 @@ fn init_cmd(root: &Path) -> Outcome {
         code: 0,
         stdout: "Wrote trail.toml, docs/records/, and AGENTS.md (when it was absent).\n\
                  Ids: RULE-1, DEC-0001, OPEN-0001, LOOP-<KEY>, REV-<KEY>, ITEM-<KEY>, FACT-<slug>.\n\
-                 Next:\n  \
-                 trailmark add loop P1 --title \"First slice\" --item none --platform docs\n  \
-                 trailmark add rule --for P1 --title \"Names stay stable\" --areas app\n  \
+                 Next (each --part reads a file you wrote; trailmark add <type> --help lists them):\n  \
+                 trailmark add loop P1 --title \"First slice\" --item none --platform docs --part brief=brief.md\n  \
+                 trailmark add rule --for P1 --title \"Names stay stable\" --areas app --part incident=incident.md --part rule=rule.md\n  \
                  trailmark check\n  \
                  trailmark adapter install <name>\n"
             .into(),

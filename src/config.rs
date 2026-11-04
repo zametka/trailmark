@@ -86,6 +86,9 @@ pub struct Config {
     pub reserve_open: u32,
     pub areas: BTreeMap<String, Area>,
     pub code_include: Vec<String>,
+    /// `[code] include = []`, written out: this repo has no code to scan, so `check` does not
+    /// warn that it found none (C23). An absent key says nothing and still warns.
+    pub code_scan_off: bool,
     pub code_exclude: Vec<String>,
     pub alias_patterns: Vec<AliasPattern>,
     pub never_whole: Vec<String>,
@@ -350,6 +353,11 @@ fn from_value(v: &toml::Value) -> Result<Config, String> {
     }
 
     let code_include = string_list(v.get("code").and_then(|c| c.get("include")));
+    let code_scan_off = v
+        .get("code")
+        .and_then(|c| c.get("include"))
+        .and_then(|i| i.as_array())
+        .is_some_and(|a| a.is_empty());
     let code_exclude = string_list(v.get("code").and_then(|c| c.get("exclude")));
     let never_whole = string_list(v.get("never_whole"));
 
@@ -444,6 +452,7 @@ fn from_value(v: &toml::Value) -> Result<Config, String> {
         reserve_open,
         areas,
         code_include,
+        code_scan_off,
         code_exclude,
         alias_patterns,
         never_whole,

@@ -52,7 +52,7 @@ Every key `trail.toml` accepts (an unknown one is an error, exit 4, with the nea
 | `never_whole` | paths an agent must not read whole |
 | `commit_index` | `false` (default): `index/` is a local cache with its own `.gitignore`; `true`: committed, and `check` refuses a stale file (C08) |
 | `[areas]` | `<name> = { keywords = [...], paths = [...] }`; a rule's `--areas` must name one |
-| `[code]` | `include`, `exclude`: the files `check` scans for cited ids |
+| `[code]` | `include`, `exclude`: the files `check` scans for cited ids. `check` warns (C23) when no file matches or the files that match cite no id. `include = []` says the repo has no code to scan |
 | `[budgets]` | `core`, `context_default`, `context_max`, `terms` (the `trailmark terms` print, 3,200), the index budgets, `core_hot_rules`, `fold_rules_area`, `record_warn` |
 | `[reserve]` | `rule`, `open`: how many numbers `add loop` reserves (10 each) |
 | `[[alias_pattern]]` | `match`, `id` or `range`, `context_only`: how old text cites ids |
@@ -98,7 +98,7 @@ trailmark check
 
 On an empty store the first rule is `RULE-1` and the first open item is `OPEN-0001`, unless `[ids]` says otherwise. The command prints the id. Use that id. An existing store mints the next free number instead.
 
-`--part` files that you skip become the word `Pending.` The record still checks. Replace that word before anyone relies on the rule.
+A `--part` you skip becomes the word `Pending.` The record is still written, `check` warns (C12), and a record is not edited after it is added, so pass every part when you add it. A running loop or review is the exception: `trailmark close` fills its parts.
 
 `trailmark add` exits 6 when the record is invalid, and writes nothing. The stderr line is the checker code. Fix that and run the command again.
 
@@ -106,9 +106,11 @@ Other first-day commands, when you need them:
 
 ```
 trailmark add decision --title "The address stays" \
-  --field decided_by=author --field basis=silence
+  --field decided_by=author --field basis=silence \
+  --part decision=decision.txt --part why=why.txt
 trailmark add open --for LOOP-P1 --title "Weigh the spare loaf" \
-  --areas app --kind follow-up --severity low --owner author
+  --areas app --kind follow-up --severity low --owner author \
+  --part what=what.txt --part how-to-close=how.txt
 ```
 
 `basis` is `word`, `silence`, or `ruling`. `word` also needs `--field quote="..."`. Open `kind` is `risk`, `follow-up`, `owed-step`, `unverified`, or `bug`. Open `owner` is `author`, `orchestrator`, or `next-loop`.
@@ -136,7 +138,7 @@ What differs per machine (a home directory, a harness's memory folder) goes in `
 memory_md = "~/path/to/the/harness/memory"
 ```
 
-A picture that shows a convention's case goes under the store and on the record: `trailmark figure RULE-1 --add "figures/scale.png | the pass scale"`. `show` and `context` print its path and caption.
+A picture that shows a convention's case goes under the store and on the record: `trailmark figure RULE-1 --add "figures/scale.png | the pass scale"`. The path is relative to the store, and the file has to be there first. `show` and `context` print its path and caption.
 
 ## A repo that already has code and documents
 

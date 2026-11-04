@@ -22,6 +22,6 @@ The read guard fails open on input it does not understand. A new block has to be
 
 The publish workflow is `.github/workflows/publish.yml`. It runs when a GitHub release is published, the same way as axum-vite. Pushing a tag does not publish the crate. Publishing the GitHub release does.
 
-The workflow file has to be on the default branch before that release. The release tag is the version in `Cargo.toml`, as in axum-vite (`0.1.1`, or `v0.1.1`). The job checks that the tag and the version match, runs fmt, clippy, and the tests, then `cargo publish --locked`.
+The workflow file has to be on the default branch before that release. The release tag is the version in `Cargo.toml`, as in axum-vite (`0.1.2`, or `v0.1.2`). The job checks that the tag and the version match, runs fmt, clippy, and the tests, then `cargo publish --locked`.
 
 The repository secret `CARGO_REGISTRY_TOKEN` is the crates.io API token. It is not stored in the tree.

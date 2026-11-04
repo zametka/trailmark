@@ -6,7 +6,7 @@
 
 It is a record book, a bundle, a checker and a guard. It is not a search engine. Finding one rule from a vaguely worded task does not beat a random draw on specific hits. The numbers are under [What it does not do](#what-it-does-not-do).
 
-Version 0.1.1. License: MIT OR Apache-2.0 (see `LICENSE-MIT` and `LICENSE-APACHE`). Copyright 2026 Konstantin Gorodinskii. Source: https://github.com/zametka/trailmark.
+Version 0.1.2. License: MIT OR Apache-2.0 (see `LICENSE-MIT` and `LICENSE-APACHE`). Copyright 2026 Konstantin Gorodinskii. Source: https://github.com/zametka/trailmark.
 
 ## Install
 
@@ -22,19 +22,30 @@ The adapters are compiled into the binary. A copied binary still installs them. 
 
 ## Five minutes
 
-In the repository where the records should live:
+In an empty directory. In a real repository the commands are the same, and the citation goes in your own code:
 
 ```
 trailmark init
-trailmark add loop P1 --title "First slice" --item none --platform docs
-trailmark add rule --for P1 --title "Names stay stable" --areas app
+echo "Give the first slice a record." > brief.md
+trailmark add loop P1 --title "First slice" --item none --platform docs --part brief=brief.md
+echo "A renamed tray code lost a morning's orders." > incident.md
+echo "A saved name stays as it is." > rule.md
+trailmark add rule --for P1 --title "Names stay stable" --areas app --part incident=incident.md --part rule=rule.md
+mkdir -p src
+echo "// RULE-1: the tray code stays as saved." > src/orders.js
 trailmark check
 trailmark adapter install claude-code
 ```
 
+`trailmark check` ends with `0 errors, 0 warnings, 2 records, 1 code references`.
+
 `trailmark init` writes `trail.toml`, `docs/records/`, and `AGENTS.md` when that file is absent. It does not replace an existing `trail.toml`. The first rule on an empty store is `RULE-1`. The command prints the id. Cite that id.
 
-`trailmark context` prints a bundle, capped around 8,000 tokens (characters / 4). `trailmark show RULE-12` prints one record. `trailmark check` prints findings. A warning does not fail. An error does.
+`--part` reads a file and copies its text into the record, so the file can go afterwards. Write every part when you add a record. A part left out is written as `Pending.`, `trailmark check` warns (C12), and a record is not edited after it is added. A loop is the one to finish later: `add loop` takes the brief, and `trailmark close` takes the rest.
+
+In code, `trailmark check` only sees citations in the files `[code] include` names in `trail.toml`, and `trailmark init` sets that to `src/**`. If your code is elsewhere, set it, for example `include = ["lib/**", "app/**"]`. When no file matches, or the files that match cite no id, `check` warns (C23). `include = []` says the repo has no code to scan.
+
+`trailmark context` prints a bundle, capped around 8,000 tokens (characters / 4). `trailmark show RULE-1` prints one record. `trailmark check` prints findings. A warning does not fail. An error does.
 
 The source repository includes a filled example, a fictional bakery called Oven, in `examples/bakery`:
 
@@ -48,26 +59,40 @@ trailmark check
 
 ## Commands
 
+Five minutes already ran `init`, and a second `init` is refused. The other rows run in order from where it stopped, in the same directory, once these files exist. `close`, `figure`, `set`, and `terms` need them:
+
+```
+for part in built verified gates not-verified lessons; do echo "Write what happened here." > $part.md; done
+echo "The pass scale reads heavy." > what.md
+echo "Replace the scale and weigh a tray." > how.md
+mkdir -p docs/records/figures
+touch docs/records/figures/scale.png
+printf '[[term]]\nname = "tray code"\narea = "app"\nsays = ["renamed field"]\nids = ["RULE-1"]\n' > docs/records/terms.toml
+```
+
 | Command | Example |
 | --- | --- |
 | `init` | `trailmark init` |
-| `add` | `trailmark add rule --for P1 --title "Names stay stable" --areas app` |
+| `add` | `trailmark add rule --for P1 --title "Trays are weighed empty" --areas app --part incident=incident.md --part rule=rule.md` |
+| `add` | `trailmark add open --for P1 --title "The pass scale reads heavy" --areas app --kind follow-up --severity low --owner author --part what=what.md --part how-to-close=how.md` |
 | `show` | `trailmark show RULE-1` |
-| `find` | `trailmark find gluten rack --type rule` |
-| `context` | `trailmark context "the van route changed on the road"` |
+| `find` | `trailmark find stable --type rule` |
+| `context` | `trailmark context "a saved name changed"` |
 | `check` | `trailmark check` |
 | `index` | `trailmark index` |
 | `terms` | `trailmark terms` |
-| `close` | `trailmark close P1 --review owed --gates "trailmark check"` |
+| `close` | `trailmark close P1 --review owed --gates "trailmark check" --part built=built.md --part verified=verified.md --part gates=gates.md --part not-verified=not-verified.md --part lessons=lessons.md` |
 | `set` | `trailmark set OPEN-0001 status=closed --why "the scale was replaced" --by LOOP-P1` |
 | `link` | `trailmark link LOOP-P1 RULE-1 --rel missed` |
 | `tag` | `trailmark tag RULE-1 --add worktree` |
 | `retire` | `trailmark retire RULE-1 --why "superseded"` |
-| `figure` | `trailmark figure RULE-1 --add "docs/records/figures/scale.png \| the pass scale"` |
+| `figure` | `trailmark figure RULE-1 --add "figures/scale.png \| the pass scale"` |
 | `reserve` | `trailmark reserve rule 10 --for LOOP-P1` |
-| `why` | `trailmark why RULE-1` |
+| `why` | `trailmark why src/orders.js:1` |
 | `measure` | `trailmark measure` |
 | `adapter` | `trailmark adapter install claude-code` |
+
+`close` refuses a loop while any part still says `Pending.`, and names those parts, so each one the loop does not have yet needs its `--part`. A `figure` path is relative to the store, and the file has to be there first. `why` takes a path or a commit; for a record, use `trailmark show RULE-1 --links`.
 
 `trailmark add <type> --help` lists what that type requires. `trailmark help adapter` says what `--force` replaces. A new project starts with `trailmark init` and `trailmark add`.
 
@@ -113,6 +138,8 @@ It now logs three shapes that used to pass unseen: `find <store> | xargs cat`, `
 - `TRAIL_ALLOW=brief` anywhere in the command text, including an `echo`
 - `git diff <rev> -- <removed document>`, which is neither blocked nor logged
 
+A waiver is an entry in `docs/records/_migration/waivers.toml` that tells `trailmark check` to accept one named finding, and records who accepted it, when, and why. `check` prints every waiver in force.
+
 A waiver matches a citation by path and by the cited text. If the waived citation is deleted and a new citation of the same text is added in that file, the waiver covers the new one. `trailmark check` does not say so.
 
 ## Harnesses
@@ -132,13 +159,15 @@ These numbers were measured on one private project, over frozen briefs, against 
 
 Specific means: the needed record is in the bundle, and at most one eighth of the wrong briefs also show it. A random ranker scores specific hits, because a bundle shows a slice of the store and the threshold is about that slice. Its margin is about zero. Margin is the measure that is not fooled by that.
 
-On the held low-overlap briefs, a random ranker scored 4.9 specific hits out of 80, range 2–9. On literal briefs, 5.0 out of 80, range 1–8. On a paraphrase set, 5.8, range 1–11. The word ranking's specific count on that paraphrase set was 4 of 69, below the random row. Its margin on the held low-overlap briefs was −0.004: no content signal above structure and chance. On literal briefs, hits fell from 41 to 31 when titles and bodies were shuffled among records, so a literal brief does find some of what the records say, and a large share of what it shows is structure.
+On the held low-overlap briefs, a random ranker scored 4.9 specific hits out of 80, range 2–9. On literal briefs, 5.0 out of 80, range 1–8. On a paraphrase set, 5.8, range 1–11, with no denominator of its own recorded here; the two rows before it are out of 80. The word ranking's specific count on that paraphrase set was 4 of 69. That is not a direct comparison. This README has no random count on those same 69 briefs. If the 5.8 is out of 80, the two are about 6% and about 7%. Either way the count sits inside the random range, so the word ranking does not beat a random draw there. The word ranking's margin on the held low-overlap briefs was −0.004: no content signal above structure and chance. On literal briefs, hits fell from 41 to 31 when titles and bodies were shuffled among records, so a literal brief does find some of what the records say, and a large share of what it shows is structure.
 
 Meaning search (a local embedding model) was measured and is not in this release. Hybrid specific hits were 5 of 80, the random row. Meaning-only was 9 of 80, inside the random range. Its margin over the word ranking on the held low-overlap briefs was +0.100, interval −0.001 to +0.197.
 
 A term index, where an agent rewrites the task into the project's words, was measured and not adopted as part of ranking. Its paired margin over the plain bundle was +0.079 [+0.017, +0.147] on held low-overlap briefs, +0.130 [+0.032, +0.242] on a fresh query set, and +0.133 on a blind need set. A placebo index, every term pointing at another term's records, sat within +0.025 and +0.022 of it, both intervals crossing zero. On literal briefs the real index beat the placebo by +0.086. The words carried the gain. Where the terms pointed did not. `trailmark terms` still ships as an optional aid: a project that writes a term file can ask `trailmark context --terms`. That is not a measured gain.
 
 `trailmark context` still returns a bundle. Use it for the rules a task's words actually share with the store, for the checks, and for the ids code can cite. Do not expect it to retrieve a specific rule from a vague sentence.
+
+`trailmark check` knows whether a cited id exists and is live. It does not know which id you meant. A typo that lands on another live id, `RULE-2` written for `RULE-12`, passes.
 
 ## Configuration
 
@@ -158,4 +187,4 @@ python3 -I eval/trail_eval.py synthetic target/release/trailmark --random 40
 
 The release flags keep a home directory out of the binary. The eval is the synthetic example only. It needs `python3` and the standard library. It checks that the harness runs. It does not measure recall.
 
-A new version is published by publishing a GitHub release of the version tag (`0.1.1`). That runs fmt, clippy, and the tests, then `cargo publish --locked`. The steps are in `CONTRIBUTING.md`.
+A new version is published by publishing a GitHub release of the version tag (`0.1.2`). That runs fmt, clippy, and the tests, then `cargo publish --locked`. The steps are in `CONTRIBUTING.md`.

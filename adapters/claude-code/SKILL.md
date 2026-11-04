@@ -6,7 +6,7 @@ Before any task, run `trailmark context "<task>"` and work from that bundle. If 
 
 Do not read the store, a generated index, or a legacy source whole. Ask `trailmark show <id>` for one record, `trailmark show <id> --part <name>` for one part, and `trailmark find <words>` to search.
 
-Record a lesson with `trailmark add rule --for <LOOP-ID> --title "..." --areas <area>`. Cite the id the command prints. `trailmark add <type> --help` lists what a type requires.
+Record a lesson with `trailmark add rule --for <LOOP-ID> --title "..." --areas <area> --part incident=<file> --part rule=<file>`. Cite the id the command prints. `trailmark add <type> --help` lists what a type requires.
 
 The bundle's "How to run" holds recipes: commands to copy. A command you needed and did not find is a recipe: `trailmark add fact recipe-<slug> --field kind=recipe --field scope=repo --field applies_to=<words a task would use> --body <file>`. A rule you needed that the bundle left out: `trailmark link <LOOP-ID> <rule id> --rel missed`, and `trailmark tag <rule id> --add <the word your task used>`.
 

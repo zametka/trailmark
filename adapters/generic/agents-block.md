@@ -6,7 +6,7 @@ Before any task, run `trailmark context "<task>"` and read that bundle. tok4 is 
 
 Never read a whole document, a generated index, or a directory of records. Use `trailmark show <id>`, `trailmark show <id> --part <name>`, and `trailmark find <words>`.
 
-Record a lesson with `trailmark add rule --for <LOOP-ID> --title "..." --areas <area>`. Cite the id the command prints. Run `trailmark check` before you finish.
+Record a lesson with `trailmark add rule --for <LOOP-ID> --title "..." --areas <area> --part incident=<file> --part rule=<file>`. Cite the id the command prints. Run `trailmark check` before you finish.
 
 This file is a request, not a guard. Nothing stops a tool from reading the store whole unless a harness hook is installed (`trailmark adapter install claude-code`). Other harnesses have this block only.
 

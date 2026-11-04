@@ -137,6 +137,7 @@ pub fn check_store(store: &Store, opts: &CheckOpts) -> CheckResult {
     if opts.code {
         problems.extend(check_code(store, &code_hits));
         problems.extend(check_tombstone_cites(store, &code_hits, &want));
+        problems.extend(check_code_scanned(store, code_refs));
     } else {
         problems.extend(check_tombstone_cites(store, &[], &want));
     }
@@ -784,6 +785,34 @@ fn check_shape(store: &Store, rec: &Record) -> Vec<Problem> {
     out
 }
 
+/// C23: a scan that found nothing reads like a clean scan. A dead id in a folder `[code] include`
+/// does not name is unreported, and the summary only says `0 code references`. The finding
+/// belongs to `trail.toml`, which is where the fix goes.
+fn check_code_scanned(store: &Store, code_refs: usize) -> Option<Problem> {
+    if code_refs > 0 || store.config.code_scan_off {
+        return None;
+    }
+    const FIX: &str = "set [code] include in trail.toml to the folders that hold your code, or include = [] if this repo has none";
+    let include = store.config.code_include.join(", ");
+    let found = if include.is_empty() {
+        "trail.toml has no [code] include, so ids cited in code are not checked".to_string()
+    } else {
+        match scan::code_files(store).len() {
+            0 => format!(
+                "no file matched [code] include ({include}), so ids cited in code are not checked"
+            ),
+            1 => format!("1 file matched [code] include ({include}) and it cites no id"),
+            n => format!("{n} files matched [code] include ({include}) and none cites an id"),
+        }
+    };
+    Some(Problem::warning(
+        "C23",
+        "trail.toml",
+        0,
+        format!("{found}; {FIX}"),
+    ))
+}
+
 /// C20: a figure is a picture or a short film under the store, with a caption that says what
 /// to see. The file must exist, so a convention never points at a picture nobody can open.
 fn check_figures(store: &Store, rec: &Record) -> Vec<Problem> {
@@ -812,7 +841,10 @@ fn check_figures(store: &Store, rec: &Record) -> Vec<Problem> {
         }
         let full = store.config.store_dir(&store.root).join(&path);
         match std::fs::metadata(&full) {
-            Err(_) => bad(format!("figure {path} does not exist in the store")),
+            Err(_) => bad(format!(
+                "figure {path} does not exist in the store: a figure path is relative to the store, so this looked for {}/{path}",
+                store.config.store_rel
+            )),
             Ok(m) if matches!(ext.as_str(), "mp4" | "webm") && m.len() > FILM_MAX => {
                 bad(format!("figure {path} is over 20 MB; keep films short"))
             }

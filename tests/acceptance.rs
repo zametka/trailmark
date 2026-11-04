@@ -2422,6 +2422,12 @@ fn figures_must_exist_and_travel_with_a_rule() {
     );
     expect(&out, 6, "missing picture");
     assert!(out.stderr.contains("C20"), "{}", out.stderr);
+    assert!(
+        out.stderr.contains("relative to the store")
+            && out.stderr.contains("store/figures/rye-board.png"),
+        "{}",
+        out.stderr
+    );
     write(
         &root.path,
         "store/figures/rye-board.png",
@@ -5267,4 +5273,103 @@ fn decisions_rank_with_rules_and_tags_lead_to_their_titles_words() {
     assert!(line.contains("by tags' words"), "{}", out.stdout);
     let out = trailmark(&root.path, &["context", "a tray", "--explain"]);
     assert!(!out.stdout.contains("by tags' words"), "{}", out.stdout);
+}
+
+/// C23: `trailmark init` sets `[code] include = ["src/**"]`. A dead id in `lib/` was unreported,
+/// and `0 code references` was the only sign the scan had found nothing.
+#[test]
+fn a_code_scan_that_found_nothing_says_so() {
+    static N: AtomicU64 = AtomicU64::new(0);
+    let path = std::env::temp_dir().join(format!(
+        "trail-scan-{}-{}",
+        std::process::id(),
+        N.fetch_add(1, Ordering::Relaxed)
+    ));
+    let _ = std::fs::remove_dir_all(&path);
+    std::fs::create_dir_all(&path).unwrap();
+    let root = Root { path };
+    let toml = root.path.join("trail.toml");
+    expect(&trailmark(&root.path, &["init"]), 0, "init");
+    expect(
+        &trailmark(
+            &root.path,
+            &[
+                "add",
+                "loop",
+                "P1",
+                "--title",
+                "First slice",
+                "--item",
+                "none",
+                "--platform",
+                "docs",
+            ],
+        ),
+        0,
+        "add loop",
+    );
+
+    // The citation is outside `include`, so no file matched at all.
+    write(&root.path, "lib/a.ts", "// RULE-999\n");
+    let out = trailmark(&root.path, &["check"]);
+    expect(&out, 0, "a warning does not fail");
+    assert!(
+        out.stdout
+            .contains("trail.toml: C23 warning: no file matched [code] include (src/**)"),
+        "{}",
+        out.stdout
+    );
+    assert!(out.stdout.contains("set [code] include"), "{}", out.stdout);
+    assert!(out.stdout.contains("0 code references"), "{}", out.stdout);
+
+    // Files matched and none of them cites an id: the dead id is still not reported.
+    write(&root.path, "src/a.ts", "const a = 1;\n");
+    let out = trailmark(&root.path, &["check"]);
+    assert!(
+        out.stdout
+            .contains("C23 warning: 1 file matched [code] include (src/**) and it cites no id"),
+        "{}",
+        out.stdout
+    );
+    write(&root.path, "src/b.ts", "const b = 2;\n");
+    let out = trailmark(&root.path, &["check"]);
+    assert!(
+        out.stdout
+            .contains("C23 warning: 2 files matched [code] include (src/**) and none cites an id"),
+        "{}",
+        out.stdout
+    );
+
+    // `--format json` carries it, and `--strict` fails on it like any warning.
+    let out = trailmark(&root.path, &["check", "--format", "json"]);
+    assert!(out.stdout.contains("\"C23\""), "{}", out.stdout);
+    expect(&trailmark(&root.path, &["check", "--strict"]), 1, "strict");
+
+    // Point `include` at the code: the dead id is reported, and the warning has gone.
+    replace(&toml, r#"include = ["src/**"]"#, r#"include = ["lib/**"]"#);
+    let out = trailmark(&root.path, &["check"]);
+    expect(&out, 1, "dead id");
+    assert!(
+        out.stdout.contains("C10") && out.stdout.contains("RULE-999"),
+        "{}",
+        out.stdout
+    );
+    assert!(!out.stdout.contains("C23"), "{}", out.stdout);
+
+    // `include = []` is a statement: no code to scan, nothing to warn about.
+    replace(&toml, r#"include = ["lib/**"]"#, "include = []");
+    let out = trailmark(&root.path, &["check"]);
+    expect(&out, 0, "include = []");
+    assert!(!out.stdout.contains("C23"), "{}", out.stdout);
+
+    // No `include` key says nothing, so the scan's emptiness is still worth saying.
+    replace(&toml, "include = []\n", "");
+    let out = trailmark(&root.path, &["check"]);
+    expect(&out, 0, "no include");
+    assert!(
+        out.stdout
+            .contains("C23 warning: trail.toml has no [code] include"),
+        "{}",
+        out.stdout
+    );
 }
